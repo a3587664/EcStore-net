@@ -37,26 +37,13 @@ namespace IsolatedByInheritanceAndOverride.Test
 
             mockOrderService.Object.SyncBookOrders();
 
-            mockBookDao.Verify(x => x.Insert(It.Is<Order>( order => order.Type == "Book")),Times.Exactly(2));
-            mockBookDao.Verify(x => x.Insert(It.Is<Order>( order => order.Type == "no")),Times.Never);
+            mockBookDao.Verify(x => x.Insert(It.Is<Order>(order => order.Type == "Book")), Times.Exactly(2));
+            mockBookDao.Verify(x => x.Insert(It.Is<Order>(order => order.Type == "no")), Times.Never);
 
             // hard to isolate dependency to unit test
 
             //var target = new OrderService();
             //target.SyncBookOrders();
-        }
-    }
-
-    public class FakeBookDao : IBookDao
-    {
-        public void Insert(Order order)
-        {
-            // directly depend on some web service
-            //var client = new HttpClient();
-            //var response = client.PostAsync<Order>("http://api.joey.io/Order", order, new JsonMediaTypeFormatter()).Result;
-
-            //response.EnsureSuccessStatusCode();
-            //throw new NotImplementedException();
         }
     }
 }
