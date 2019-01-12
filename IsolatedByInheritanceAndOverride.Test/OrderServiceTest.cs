@@ -31,10 +31,14 @@ namespace IsolatedByInheritanceAndOverride.Test
                     Type = "no"
                 }
             });
-            
-            mockOrderService.Protected().Setup<IBookDao>("GetBookDao").Returns(new FakeBookDao());
+            var mockBookDao = new Mock<IBookDao>();
+
+            mockOrderService.Protected().Setup<IBookDao>("GetBookDao").Returns(mockBookDao.Object);
 
             mockOrderService.Object.SyncBookOrders();
+
+            mockBookDao.Verify(x => x.Insert(It.Is<Order>( order => order.Type == "Book")),Times.Exactly(2));
+            mockBookDao.Verify(x => x.Insert(It.Is<Order>( order => order.Type == "no")),Times.Never);
 
             // hard to isolate dependency to unit test
 
